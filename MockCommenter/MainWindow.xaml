@@ -78,11 +78,15 @@
                         <RowDefinition Height="120"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="290"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                             <Slider x:Name="A" Style="{StaticResource SliderStyle}"
-                            SelectionEnd="{Binding ElementName=A, Path=Value}"
-                            Value="{Binding ElementName=AValueBox, Path=Text}">
+                                    SelectionEnd="{Binding ElementName=A, Path=Value}"
+                                    Value="{Binding ElementName=AValueBox, Path=Text}">
                                 <Slider.Resources>
                                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Black"/>
                                 </Slider.Resources>
@@ -91,56 +95,89 @@
                             <TextBox x:Name="AValueBox" Text="255" Style="{StaticResource DispBoxStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                            <Slider x:Name="R"  Style="{StaticResource SliderStyle}" 
-                            SelectionEnd="{Binding ElementName=R, Path=Value}"
-                            Value="{Binding ElementName=RValueBox, Path=Text}">
+                            <Slider x:Name="R"  Style="{StaticResource SliderStyle}"
+                                    SelectionEnd="{Binding ElementName=R, Path=Value}"
+                                    Value="{Binding ElementName=RValueBox, Path=Text}">
                                 <Slider.Resources>
                                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red"/>
                                 </Slider.Resources>
                             </Slider>
                             <TextBlock Text="R=" Margin="5,0,0,0" Foreground="Red"/>
-                            <TextBox x:Name="RValueBox" Text="255" 
-                              Foreground="Red" Style="{StaticResource DispBoxStyle}"/>
+                            <TextBox x:Name="RValueBox" Text="255"
+                                     Foreground="Red" Style="{StaticResource DispBoxStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                             <Slider x:Name="G" Style="{StaticResource SliderStyle}"
-                            SelectionEnd="{Binding ElementName=G, Path=Value}"
-                            Value="{Binding ElementName=GValueBox, Path=Text}">
+                                    SelectionEnd="{Binding ElementName=G, Path=Value}"
+                                    Value="{Binding ElementName=GValueBox, Path=Text}">
                                 <Slider.Resources>
                                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Green"/>
                                 </Slider.Resources>
                             </Slider>
                             <TextBlock Text="G=" Margin="5,0,0,0" Foreground="Green"/>
                             <TextBox x:Name="GValueBox" Text="255"
-                              Foreground="Green" Style="{StaticResource DispBoxStyle}"/>
+                                     Foreground="Green" Style="{StaticResource DispBoxStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                             <Slider x:Name="B" Style="{StaticResource SliderStyle}"
-                            SelectionEnd="{Binding ElementName=B, Path=Value}"
-                            Value="{Binding ElementName=BValueBox, Path=Text}">
+                                    SelectionEnd="{Binding ElementName=B, Path=Value}"
+                                    Value="{Binding ElementName=BValueBox, Path=Text}">
                                 <Slider.Resources>
                                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue"/>
                                 </Slider.Resources>
                             </Slider>
                             <TextBlock Text="B=" Margin="5,0,0,0" Foreground="Blue"/>
                             <TextBox x:Name="BValueBox" Text="255"
-                             Foreground="Blue" Style="{StaticResource DispBoxStyle}"/>
+                                     Foreground="Blue" Style="{StaticResource DispBoxStyle}"/>
                         </StackPanel>
                     </StackPanel>
-                    <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1">
+                    <StackPanel Grid.Column="1">
+                        <StackPanel.Resources>
+                            <Style x:Key="ColumnsTextStyle" TargetType="{x:Type TextBlock}">
+                                <Setter Property="Margin" Value="5,0,5,0"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <DockPanel Margin="3">
+                            <TextBlock Text="User" Style="{StaticResource ColumnsTextStyle}"/>
+                            <ComboBox x:Name="UserSelectBox">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="{Binding UserIcon}" Height="20" Width="20" Stretch="Fill"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DockPanel>
+                        <StackPanel Margin="3">
+                            <TextBlock Text="Comment"/>
+                            <TextBox x:Name="CommentBox"/>
+                        </StackPanel>
+                        <StackPanel Margin="3" Orientation="Horizontal">
+                            <TextBlock Text="Pay" Margin="0,0,5,0"/>
+                            <TextBox x:Name="PayBox" Text="0" Width="100"/>
+                        </StackPanel>
+                        <Button x:Name="SendButton" Content="Send" Click="SendButton_Click"/>
+                    </StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2">
                         <ListBox x:Name="CommentList" Margin="10"
-                             ItemsSource="{Binding}" Background="Transparent" BorderThickness="0">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
+                                 Background="Transparent" BorderThickness="0">
+                            <ListBox.Resources>
+                                <Style x:Key="BaseTextStyle" TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Margin" Value="5,0,0,0"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                </Style>
+                                <DataTemplate x:Key="NormalTemplate">
                                     <StackPanel Orientation="Horizontal" Margin="3">
                                         <StackPanel.Resources>
-                                            <Style x:Key="BaseTextStyle" TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Margin" Value="5,0,0,0"/>
-                                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                                <Setter Property="FontFamily" Value="Yu Gothic UI"/>
-                                                <Setter Property="FontSize" Value="12"/>
-                                                <Setter Property="SnapsToDevicePixels" Value="True" />
-                                            </Style>
                                             <Style x:Key="UserStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextStyle}">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsMember}" Value="true">
@@ -155,7 +192,30 @@
                                         <TextBlock Style="{StaticResource BaseTextStyle}" Text="{Binding Comment}"/>
                                     </StackPanel>
                                 </DataTemplate>
-                            </ListBox.ItemTemplate>
+                                <DataTemplate x:Key="SuperTemplate">
+                                    <Grid Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="40"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Orientation="Horizontal" Background="{Binding Header}" Grid.Row="0">
+                                            <Image Source="{Binding UserIcon}" Height="30" Width="30" Stretch="Fill" Margin="5"/>
+                                            <StackPanel>
+                                                <TextBlock Style="{StaticResource BaseTextStyle}" Text="{Binding User}" Foreground="{Binding FontColor}"/>
+                                                <TextBlock Style="{StaticResource BaseTextStyle}" Text="{Binding Pay, StringFormat={}{0:C}, ConverterCulture=ja-JP}"
+                                                           Foreground="{Binding FontColor}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Background="{Binding Body}">
+                                            <TextBlock  Style="{StaticResource BaseTextStyle}" Text="{Binding Comment}" Foreground="{Binding FontColor}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.Resources>
+                            <ListBox.ItemTemplateSelector>
+                                <local:CommentStyleSelector Template1="{StaticResource NormalTemplate}"
+                                                            Template2="{StaticResource SuperTemplate}"/>
+                            </ListBox.ItemTemplateSelector>
                             <ItemsControl.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListBoxItem}">
                                     <Setter Property="OverridesDefaultStyle" Value="True" />

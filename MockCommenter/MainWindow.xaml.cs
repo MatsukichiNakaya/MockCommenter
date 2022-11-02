@@ -23,25 +23,50 @@ namespace MockCommenter
 
         private const String COMMENT_FILE = @".\Comments.txt";
         private const String USER_FILE = @".\User.txt";
+        private const String IMAGE_DIR = "img";
 
         public MainWindow()
         {
             InitializeComponent();
-            this.LoopTimer = new DispatcherTimer() {
-                Interval = new TimeSpan(0, 0, 1),
-            };
-            this.LoopTimer.Tick += LoopTimer_Tick;
-            this.Rnd = new XorShift();
 
+            // データ読込み
+            ExistsFiles();
             this.Users = ReadUserData();
+            this.UserSelectBox.ItemsSource = this.Users;
+            if(0 < this.Users.Length) {
+                this.UserSelectBox.SelectedIndex = 0;
+            }
             this.Comments = TextFile.ReadLines(COMMENT_FILE)
                                     .Where(x => !String.IsNullOrEmpty(x)).ToArray();
+            // 初期データ設定
+            this.Rnd = new XorShift();
             var items = new List<CommentInfo>();
             for (var i = 0; i < 20; i++) {
                 items.Add(SelectRndComment());
             }
             this.CommentList.ItemsSource = items;
+            this.LoopTimer = new DispatcherTimer() {
+                Interval = new TimeSpan(0, 0, 1),
+            };
+            this.LoopTimer.Tick += LoopTimer_Tick;
+            
             this.LoopTimer.Start();
+        }
+
+        /// <summary>
+        /// ファイル有無確認(無ければ作る)
+        /// </summary>
+        private static void ExistsFiles()
+        {
+            if (!System.IO.Directory.Exists(@$".\{IMAGE_DIR}")) {
+                System.IO.Directory.CreateDirectory(IMAGE_DIR);
+            }
+            var files = new String[] { COMMENT_FILE, USER_FILE };
+            foreach (var f in files) {
+                if (!System.IO.File.Exists(f)) {
+                    System.IO.File.CreateText(f);
+                }
+            }
         }
 
         #region WindowBaseFunctions
@@ -94,13 +119,18 @@ namespace MockCommenter
         /// <param name="e"></param>
         private void LoopTimer_Tick(Object? sender, EventArgs e)
         {
+            SetComment(SelectRndComment());   
+        }
+
+        private void SetComment(CommentInfo cmt)
+        {
             this.LoopTimer.Stop();
             var items = this.CommentList.ItemsSource as List<CommentInfo>;
             // コメントは100個まで
             if (100 <= (items?.Count ?? 0)) {
                 items?.RemoveAt(0);
             }
-            items?.Add(SelectRndComment());
+            items?.Add(cmt);
             // 更新周期をランダムに設定
             var sec = this.Rnd.Next(0, 2);
             var milisec = this.Rnd.Next(0, 999);
@@ -122,10 +152,14 @@ namespace MockCommenter
         {
             var readData = TextFile.ReadLines(USER_FILE);
             var result = new List<UserInfo>();
+            var uIdx = -1;
+
             foreach (var line in readData) {
+                uIdx++;
                 var sp = line.Split(',');
                 if(sp.Length <= 1) { continue; }
-                result.Add(new UserInfo(sp[0], sp[1] == "1"));
+                var path = System.IO.Path.GetFullPath(@$".\{IMAGE_DIR}\{uIdx:000}.png");
+                result.Add(new UserInfo(ReadImage(path), sp[0], sp[1] == "1"));
             }
             return result.ToArray();
         }
@@ -158,9 +192,28 @@ namespace MockCommenter
         {
             var uIdx = this.Rnd.Next(0, this.Users.Length);
             var cIdx = this.Rnd.Next(0, this.Comments.Length);
-            var path = System.IO.Path.GetFullPath(@$".\img\{uIdx:000}.png");
-            var cmt = new CommentInfo(ReadImage(path), this.Comments[cIdx], this.Users[uIdx]);
+            var cmt = new CommentInfo(this.Comments[cIdx], this.Users[uIdx]);
+            //var paySeed = this.Rnd.Next(0, 100);
+            //if(95 <= paySeed) {
+            //    cmt.SetPayColor(this.Rnd.Next(1, 100) * 100);
+            //}
             return cmt;
+        }
+
+        /// <summary>
+        /// 任意コメント書き込み
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SendButton_Click(Object sender, RoutedEventArgs e)
+        {
+            var user = this.UserSelectBox.SelectedItem as UserInfo;
+            if (user == null) { return; }
+            var cmt = new CommentInfo(this.CommentBox.Text, user);
+            if (Int32.TryParse(this.PayBox.Text, out var pay)) {
+                cmt.SetPayColor(pay);
+            }
+            SetComment(cmt);
         }
     }
 }
