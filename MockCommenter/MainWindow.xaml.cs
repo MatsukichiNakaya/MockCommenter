@@ -22,7 +22,7 @@ namespace MockCommenter
         private XorShift Rnd { get; set; }
 
         private const String COMMENT_FILE = @".\Comments.txt";
-        private const String USER_FILE = @".\User.txt";
+        private const String USER_FILE = @".\Users.txt";
         private const String IMAGE_DIR = "img";
 
         public MainWindow()

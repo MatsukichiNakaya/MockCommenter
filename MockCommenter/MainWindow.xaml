@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MockCommenter"
         mc:Ignorable="d"
-        Title="Commenter" Height="600" Width="500"
+        Title="Commenter" Height="600" Width="600"
         SnapsToDevicePixels="True" UseLayoutRounding="True" WindowStyle="None"
         AllowsTransparency="True"
         Loaded="Window_Loaded"
@@ -131,7 +131,7 @@
                                      Foreground="Blue" Style="{StaticResource DispBoxStyle}"/>
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Grid.Column="1">
+                    <StackPanel Grid.Column="0" Grid.Row="1">
                         <StackPanel.Resources>
                             <Style x:Key="ColumnsTextStyle" TargetType="{x:Type TextBlock}">
                                 <Setter Property="Margin" Value="5,0,5,0"/>
@@ -156,7 +156,7 @@
                         </DockPanel>
                         <StackPanel Margin="3">
                             <TextBlock Text="Comment"/>
-                            <TextBox x:Name="CommentBox"/>
+                            <TextBox x:Name="CommentBox" AcceptsReturn="True"/>
                         </StackPanel>
                         <StackPanel Margin="3" Orientation="Horizontal">
                             <TextBlock Text="Pay" Margin="0,0,5,0"/>
@@ -164,7 +164,7 @@
                         </StackPanel>
                         <Button x:Name="SendButton" Content="Send" Click="SendButton_Click"/>
                     </StackPanel>
-                    <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1" Grid.ColumnSpan="2">
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                         <ListBox x:Name="CommentList" Margin="10"
                                  Background="Transparent" BorderThickness="0">
                             <ListBox.Resources>
