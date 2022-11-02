@@ -32,7 +32,7 @@ namespace Project.FileIO
         /// UTFのどれに相当するか判定するものなので
         /// それ以外は別途確認すること
         /// </remarks>
-        public static Encoding DetectEncodingFromBOM(Byte[] bytes)
+        public static Encoding? DetectEncodingFromBOM(Byte[] bytes)
         {   // 判定不可
             if (bytes.Length < JUDGMENT_NUM) { return null; }
 
@@ -67,16 +67,16 @@ namespace Project.FileIO
         /// 文字列としての読み込み
         /// </summary>
         /// <param name="filePath">読込みファイルのパス</param>
-        public static String Read(String filePath)
+        public static String? Read(String filePath)
         {
             // ファイル有無の確認
             if (!File.Exists(filePath)) { return null; }
             // バイト配列で取得
             var rawData = File.ReadAllBytes(filePath);
             // エンコード情報取得(UTF 関連の情報のみ)
-            Encoding enc = DetectEncodingFromBOM(rawData);
+            var enc = DetectEncodingFromBOM(rawData);
             // null の場合　オペレーティングシステムのデフォルトを使用
-            if (enc == null) { enc = Encoding.Default; }
+            enc ??= Encoding.Default;
 
             return Read(filePath, enc);
         }
@@ -86,15 +86,15 @@ namespace Project.FileIO
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="enc"></param>
-        public static String Read(String filePath, Encoding enc)
+        public static String? Read(String filePath, Encoding enc)
         {
             if (!File.Exists(filePath)) { return null; }
             var result = new StringBuilder();
             using (var fs = new FileStream(filePath, FileMode.Open,
                                            FileAccess.Read, FileShare.ReadWrite)) {
                 using TextReader sr = new StreamReader(fs, enc);
-                String line;
-                while ((line = sr.ReadLine()) != null) {
+                String? line;
+                while ((line = sr?.ReadLine()) != null) {
                     result.Append(line).Append("\r\n");
                 }
             }
@@ -106,7 +106,7 @@ namespace Project.FileIO
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static String[] ReadLines(String filePath)
+        public static String[]? ReadLines(String filePath)
         {
             return ReadLines(filePath, Encoding.UTF8);
         }
@@ -117,7 +117,7 @@ namespace Project.FileIO
         /// <param name="filePath"></param>
         /// <param name="enc"></param>
         /// <returns></returns>
-        public static String[] ReadLines(String filePath, Encoding enc)
+        public static String[]? ReadLines(String filePath, Encoding enc)
         {
             return Read(filePath, enc)?.Replace("\r\n", "\n").Split('\n');
         }

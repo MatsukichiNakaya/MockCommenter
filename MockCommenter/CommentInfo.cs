@@ -7,7 +7,7 @@ namespace MockCommenter
 {
     public class CommentInfo
     {
-        public BitmapImage UserIcon { get; }
+        public BitmapImage? UserIcon { get; }
         public String User { get; }
         public Boolean IsMember { get; }
         public String Comment { get; }

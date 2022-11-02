@@ -36,8 +36,9 @@ namespace MockCommenter
             if(0 < this.Users.Length) {
                 this.UserSelectBox.SelectedIndex = 0;
             }
-            this.Comments = TextFile.ReadLines(COMMENT_FILE)
-                                    .Where(x => !String.IsNullOrEmpty(x)).ToArray();
+            this.Comments = TextFile.ReadLines(COMMENT_FILE)?
+                                    .Where(x => !String.IsNullOrEmpty(x)).ToArray()
+                                    ?? Array.Empty<String>();
             // 初期データ設定
             this.Rnd = new XorShift();
             var items = new List<CommentInfo>();
@@ -152,6 +153,7 @@ namespace MockCommenter
         {
             var readData = TextFile.ReadLines(USER_FILE);
             var result = new List<UserInfo>();
+            if (readData is null) { return Array.Empty<UserInfo>(); }
 
             foreach (var line in readData) {
                 var sp = line.Split(',');
@@ -167,20 +169,21 @@ namespace MockCommenter
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static BitmapImage ReadImage(String path)
+        private static BitmapImage? ReadImage(String path)
         {
             var bmpImg = new BitmapImage();
-
-            bmpImg.BeginInit();
-            bmpImg.CacheOption = BitmapCacheOption.OnLoad;
-            bmpImg.DecodePixelWidth = 20;
-            bmpImg.CreateOptions = BitmapCreateOptions.None;
-            bmpImg.UriSource = new Uri(path);
-            bmpImg.EndInit();
-            bmpImg.Freeze();
-
-            return bmpImg;
-        }
+            try {
+				bmpImg.BeginInit();
+				bmpImg.CacheOption = BitmapCacheOption.OnLoad;
+				bmpImg.DecodePixelWidth = 20;
+				bmpImg.CreateOptions = BitmapCreateOptions.None;
+				bmpImg.UriSource = new Uri(path);
+				bmpImg.EndInit();
+				bmpImg.Freeze();
+				return bmpImg;
+			} catch { }
+			return null;
+		}
         
         /// <summary>
         /// コメントランダム生成
@@ -205,8 +208,7 @@ namespace MockCommenter
         /// <param name="e"></param>
         private void SendButton_Click(Object sender, RoutedEventArgs e)
         {
-            var user = this.UserSelectBox.SelectedItem as UserInfo;
-            if (user == null) { return; }
+            if (this.UserSelectBox.SelectedItem is not UserInfo user) { return; }
             var cmt = new CommentInfo(this.CommentBox.Text, user);
             if (Int32.TryParse(this.PayBox.Text, out var pay)) {
                 cmt.SetPayColor(pay);
