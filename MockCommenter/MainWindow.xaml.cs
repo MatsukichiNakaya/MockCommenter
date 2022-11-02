@@ -152,13 +152,11 @@ namespace MockCommenter
         {
             var readData = TextFile.ReadLines(USER_FILE);
             var result = new List<UserInfo>();
-            var uIdx = -1;
 
             foreach (var line in readData) {
-                uIdx++;
                 var sp = line.Split(',');
-                if(sp.Length <= 1) { continue; }
-                var path = System.IO.Path.GetFullPath(@$".\{IMAGE_DIR}\{uIdx:000}.png");
+                if(sp.Length <= 2) { continue; }
+                var path = System.IO.Path.GetFullPath(@$".\{IMAGE_DIR}\{sp[2]}");
                 result.Add(new UserInfo(ReadImage(path), sp[0], sp[1] == "1"));
             }
             return result.ToArray();
