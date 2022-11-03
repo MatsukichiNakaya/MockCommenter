@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="StrokeTextblock.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\window_icon.png" />
   </ItemGroup>
 

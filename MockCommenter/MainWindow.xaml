@@ -150,17 +150,18 @@
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Source="{Binding UserIcon}" Height="20" Width="20" Stretch="Fill"/>
-                                            <TextBlock Text="{Binding Name}"/>
+                                            <Ellipse Height="20" Width="20">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding UserIcon}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </DockPanel>
-                        <!--<StackPanel Margin="3">
-                            <TextBox x:Name="CommentBox" AcceptsReturn="True"/>
-                        </StackPanel>-->
-                        <TextBox x:Name="CommentBox"
+                        <TextBox x:Name="CommentBox" AcceptsReturn="True"
                                  prj:PlaceHolderBehavior.PlaceHolderText="コメント入力"/>
                         <StackPanel Margin="3" Orientation="Horizontal">
                             <TextBlock Text="金額 (0で通常コメント)" Margin="0,0,5,0"/>
@@ -177,7 +178,7 @@
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="FontFamily" Value="Yu Gothic UI"/>
                                     <Setter Property="FontSize" Value="12"/>
-                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                    <Setter Property="SnapsToDevicePixels" Value="True"/>
                                 </Style>
                                 <DataTemplate x:Key="NormalTemplate">
                                     <StackPanel Orientation="Horizontal" Margin="3">
@@ -191,28 +192,42 @@
                                                 <Setter Property="FontWeight" Value="Bold"/>
                                             </Style>
                                         </StackPanel.Resources>
-                                        <Image Source="{Binding UserIcon}" Height="20" Width="20" Stretch="Fill"/>
+                                        <Ellipse Height="20" Width="20" Margin="5">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding UserIcon}"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
                                         <TextBlock Style="{StaticResource UserStyle}" Text="{Binding User}"/>
                                         <TextBlock Style="{StaticResource BaseTextStyle}" Text="{Binding Comment}"/>
                                     </StackPanel>
                                 </DataTemplate>
                                 <DataTemplate x:Key="SuperTemplate">
                                     <Grid Margin="5">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="40"/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <StackPanel Orientation="Horizontal" Background="{Binding Header}" Grid.Row="0">
-                                            <Image Source="{Binding UserIcon}" Height="30" Width="30" Stretch="Fill" Margin="5"/>
-                                            <StackPanel>
-                                                <TextBlock Style="{StaticResource BaseTextStyle}" Text="{Binding User}" Foreground="{Binding FontColor}"/>
-                                                <TextBlock Style="{StaticResource BaseTextStyle}" Text="{Binding Pay, StringFormat={}{0:C}, ConverterCulture=ja-JP}"
-                                                           Foreground="{Binding FontColor}"/>
+                                        <Border x:Name="RoundedGrid" CornerRadius="5" BorderThickness="0" Background="Red" Padding="5"/>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="40"/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.OpacityMask>
+                                                <VisualBrush Visual="{Binding ElementName=RoundedGrid}"/>
+                                            </Grid.OpacityMask>
+                                            <StackPanel Orientation="Horizontal" Background="{Binding Header}" Grid.Row="0">
+                                                <Ellipse Height="30" Width="30" Margin="5">
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush ImageSource="{Binding UserIcon}"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <StackPanel>
+                                                    <TextBlock Style="{StaticResource BaseTextStyle}" Text="{Binding User}" Foreground="{Binding FontColor}" Margin="8,5,0,0"/>
+                                                    <TextBlock Style="{StaticResource BaseTextStyle}" Text="{Binding Pay, StringFormat={}{0:C}, ConverterCulture=ja-JP}" Foreground="{Binding FontColor}"/>
+                                                </StackPanel>
                                             </StackPanel>
-                                        </StackPanel>
-                                        <StackPanel Grid.Row="1" Background="{Binding Body}">
-                                            <TextBlock  Style="{StaticResource BaseTextStyle}" Text="{Binding Comment}" Foreground="{Binding FontColor}"/>
-                                        </StackPanel>
+                                            <StackPanel Grid.Row="1" Background="{Binding Body}">
+                                                <TextBlock  Style="{StaticResource BaseTextStyle}" Margin="5"
+                                                            Text="{Binding Comment}" Foreground="{Binding FontColor}"/>
+                                            </StackPanel>
+                                        </Grid>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.Resources>
