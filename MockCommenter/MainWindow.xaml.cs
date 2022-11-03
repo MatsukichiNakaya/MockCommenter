@@ -175,7 +175,7 @@ namespace MockCommenter
             try {
 				bmpImg.BeginInit();
 				bmpImg.CacheOption = BitmapCacheOption.OnLoad;
-				bmpImg.DecodePixelWidth = 20;
+				bmpImg.DecodePixelWidth = 50;
 				bmpImg.CreateOptions = BitmapCreateOptions.None;
 				bmpImg.UriSource = new Uri(path);
 				bmpImg.EndInit();

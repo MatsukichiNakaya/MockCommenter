@@ -37,6 +37,7 @@
             <Setter Property="Margin" Value="10,0,0,0"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
+        <local:IconSizeConverter x:Key="SizeConverter"/>
     </Window.Resources>
     <Window.Background>
         <SolidColorBrush>
@@ -143,7 +144,7 @@
                                 <Setter Property="SnapsToDevicePixels" Value="True" />
                             </Style>
                         </StackPanel.Resources>
-                        <TextBlock Text="コメント設定" Margin="5"/>
+                        <TextBlock Text="コメント発言設定" Margin="5"/>
                         <DockPanel Margin="3">
                             <TextBlock Text="ユーザ選択" Style="{StaticResource ColumnsTextStyle}"/>
                             <ComboBox x:Name="UserSelectBox">
@@ -168,6 +169,25 @@
                             <TextBox x:Name="PayBox" Text="0" Width="100"/>
                         </StackPanel>
                         <Button x:Name="SendButton" Content="発言" Click="SendButton_Click"/>
+
+
+                        <TextBlock Text="コメント欄の表示設定" Margin="5,20,5,0"/>
+                        <DockPanel>
+                            <TextBlock Text="フォントサイズ" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FontSizeBox" Text="{Binding ElementName=FontSlider, Path=Value}" Width="30" Margin="5,3"
+                                     TextAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Slider x:Name="FontSlider" Margin="5"
+                                    Style="{StaticResource SliderStyle}" Width="165"
+                                    Minimum="1" Maximum="50" Value="16"/>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="アイコンサイズ" VerticalAlignment="Center"/>
+                            <TextBox x:Name="IconSizeBox" Text="{Binding ElementName=IconSlider, Path=Value}" Width="30" Margin="5,3"
+                                     TextAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Slider x:Name="IconSlider" Margin="5"
+                                    Style="{StaticResource SliderStyle}" Width="165"
+                                    Minimum="1" Maximum="50" Value="20"/>
+                        </DockPanel>
                     </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                         <ListBox x:Name="CommentList" Margin="10"
@@ -177,7 +197,7 @@
                                     <Setter Property="Margin" Value="5,0,0,0"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="FontFamily" Value="Yu Gothic UI"/>
-                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="FontSize" Value="{Binding ElementName=FontSlider, Path=Value}"/>
                                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                                 </Style>
                                 <DataTemplate x:Key="NormalTemplate">
@@ -192,7 +212,8 @@
                                                 <Setter Property="FontWeight" Value="Bold"/>
                                             </Style>
                                         </StackPanel.Resources>
-                                        <Ellipse Height="20" Width="20" Margin="5">
+                                        <Ellipse Height="{Binding ElementName=IconSlider, Path=Value}"
+                                                 Width="{Binding ElementName=IconSlider, Path=Value}" Margin="5">
                                             <Ellipse.Fill>
                                                 <ImageBrush ImageSource="{Binding UserIcon}"/>
                                             </Ellipse.Fill>
@@ -206,14 +227,16 @@
                                         <Border x:Name="RoundedGrid" CornerRadius="5" BorderThickness="0" Background="Red" Padding="5"/>
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="40"/>
+                                                <RowDefinition Height="Auto"/>
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <Grid.OpacityMask>
                                                 <VisualBrush Visual="{Binding ElementName=RoundedGrid}"/>
                                             </Grid.OpacityMask>
                                             <StackPanel Orientation="Horizontal" Background="{Binding Header}" Grid.Row="0">
-                                                <Ellipse Height="30" Width="30" Margin="5">
+                                                <Ellipse Height="{Binding ElementName=IconSlider, Path=Value, Converter={StaticResource SizeConverter}}"
+                                                         Width="{Binding ElementName=IconSlider, Path=Value, Converter={StaticResource SizeConverter}}"
+                                                         Margin="5">
                                                     <Ellipse.Fill>
                                                         <ImageBrush ImageSource="{Binding UserIcon}"/>
                                                     </Ellipse.Fill>
