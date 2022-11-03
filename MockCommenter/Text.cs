@@ -81,12 +81,12 @@ namespace Project.FileIO
             return Read(filePath, enc);
         }
 
-        /// <summary>
-        /// 他のプロセスがファイルを開いていても読込可能
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="enc"></param>
-        public static String? Read(String filePath, Encoding enc)
+		/// <summary>
+		/// 他のプロセスがファイルを開いていても読込可能
+		/// </summary>
+		/// <param name="filePath"></param>
+		/// <param name="enc"></param>
+		public static String? Read(String filePath, Encoding enc)
         {
             if (!File.Exists(filePath)) { return null; }
             var result = new StringBuilder();

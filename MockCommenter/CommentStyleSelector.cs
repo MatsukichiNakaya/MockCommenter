@@ -15,14 +15,15 @@ namespace MockCommenter
         public DataTemplate Template1 { get; set; }
         public DataTemplate Template2 { get; set; }
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate SelectTemplate(Object item, DependencyObject container)
         {
             var info = item as CommentInfo;
 
-            if ((info?.Pay ?? 0) <= 0)
-                return this.Template1;
-            else
-                return this.Template2;
-        }
+            if ((info?.Pay ?? 0) <= 0) {
+				return this.Template1;
+			} else {
+				return this.Template2;
+			}
+		}
     }
 }
