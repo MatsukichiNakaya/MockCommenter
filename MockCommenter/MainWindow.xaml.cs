@@ -43,7 +43,10 @@ namespace MockCommenter
             this.Rnd = new XorShift();
             var items = new List<CommentInfo>();
             for (var i = 0; i < 20; i++) {
-                items.Add(SelectRndComment());
+				var cmt = SelectRndComment();
+				if (cmt is not null) {
+					items.Add(cmt);
+				}
             }
             this.CommentList.ItemsSource = items;
             this.LoopTimer = new DispatcherTimer() {
@@ -120,7 +123,10 @@ namespace MockCommenter
         /// <param name="e"></param>
         private void LoopTimer_Tick(Object? sender, EventArgs e)
         {
-            SetComment(SelectRndComment());   
+			var cmt = SelectRndComment();
+			if (cmt is not null) {
+				SetComment(cmt);
+			}
         }
 
         private void SetComment(CommentInfo cmt)
@@ -189,8 +195,10 @@ namespace MockCommenter
         /// コメントランダム生成
         /// </summary>
         /// <returns></returns>
-        private CommentInfo SelectRndComment()
+        private CommentInfo? SelectRndComment()
         {
+			if (this.Users.Length < 1) { return null; }
+			if (this.Comments.Length < 1) { return null; }
             var uIdx = this.Rnd.Next(0, this.Users.Length);
             var cIdx = this.Rnd.Next(0, this.Comments.Length);
             var cmt = new CommentInfo(this.Comments[cIdx], this.Users[uIdx]);
@@ -210,7 +218,7 @@ namespace MockCommenter
         {
             if (this.UserSelectBox.SelectedItem is not UserInfo user) { return; }
             var cmt = new CommentInfo(this.CommentBox.Text, user);
-            if (Int32.TryParse(this.PayBox.Text, out var pay)) {
+            if (UInt32.TryParse(this.PayBox.Text, out var pay)) {
                 cmt.SetPayColor(pay);
             }
             SetComment(cmt);

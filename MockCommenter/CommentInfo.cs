@@ -16,7 +16,7 @@ namespace MockCommenter
 		/// <summary>コメント本文</summary>
 		public String Comment { get; }
 		/// <summary>スパチャ額</summary>
-		public Int32 Pay { get; set; }
+		public UInt32 Pay { get; set; }
 		/// <summary>スパチャ枠ヘッダ色</summary>
 		public SolidColorBrush Header { get; set; }
 		/// <summary>スパチャ枠本文色</summary>
@@ -39,7 +39,7 @@ namespace MockCommenter
 		/// 投入額によるスパチャ色設定
 		/// </summary>
 		/// <param name="pay">スパチャ投入額</param>
-        public void SetPayColor(Int32 pay)
+        public void SetPayColor(UInt32 pay)
         {
             this.Pay = pay;
             if (pay < 200) { // 青

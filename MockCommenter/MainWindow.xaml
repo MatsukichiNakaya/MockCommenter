@@ -188,6 +188,19 @@
                                     Style="{StaticResource SliderStyle}" Width="165"
                                     Minimum="1" Maximum="50" Value="20"/>
                         </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="フォント選択" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="FontListBox" Margin="10, 5" Height="40"
+                                      ItemsSource="{Binding Source={x:Static Member=Fonts.SystemFontFamilies}}"
+                                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                      SelectedItem="{Binding ElementName=CommentBox, Path=FontFamily}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label FontSize="16" FontFamily="{Binding .}" Content="{Binding Source}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DockPanel>
                     </StackPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                         <ListBox x:Name="CommentList" Margin="10"
@@ -196,7 +209,7 @@
                                 <Style x:Key="BaseTextStyle" TargetType="{x:Type TextBlock}">
                                     <Setter Property="Margin" Value="5,0,0,0"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="FontFamily" Value="Yu Gothic UI"/>
+                                    <Setter Property="FontFamily" Value="{Binding ElementName=FontListBox, Path=SelectedItem}"/>
                                     <Setter Property="FontSize" Value="{Binding ElementName=FontSlider, Path=Value}"/>
                                     <Setter Property="SnapsToDevicePixels" Value="True"/>
                                 </Style>
